@@ -1,39 +1,87 @@
 import 'dart:ui';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:kitx/Components/Themes.dart';
+import 'package:kitx/Utils/Network.dart';
+import 'package:kitx/main.dart';
 
-// flutter_secure_storage: ^8.0.0
+// Languages.takeLanguage();
+// LanguageWidget(),
+// Languages.view(["Türkçe","İngilizce"]);
 
-final storage = FlutterSecureStorage();
+class LanguageWidget extends StatefulWidget
+{
+  const LanguageWidget({super.key});
+
+  @override
+  State<LanguageWidget> createState() => _LanguageWidgetState();
+}
+
+class _LanguageWidgetState extends State<LanguageWidget>
+{
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+            style: TextStyle(
+                fontSize: 18, color: Themes.mainColor, fontFamily: "SFUI"),
+            "Dil"),
+        SizedBox(
+          width: 20,
+        ),
+        DropdownButton<String>(
+          dropdownColor: Themes.back,
+          style: TextStyle(fontSize: 18, color: Themes.front, fontFamily: "SFUI"),
+          underline: Container(),
+          value: Languages.languageLabels[Languages.code],
+          onChanged: (value) async
+          {
+            Languages.saveLanguage(value!);
+            setState(()
+            {
+              Languages.code;
+            });
+          },
+          items: Languages.languageLabels.map((item)
+          {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(style: TextStyle(fontSize: 18, color: Themes.front, fontFamily: "SFUI"),item),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
 
 class Languages
 {
-  static int language = 0;
+  static int code = 0;
 
-  static void selectLanguage() async
+  static void takeLanguage() async
   {
-    String? code = await storage.read(key: "languageCode");
-    if(code != null && code != "")
+    String? localCode = await storage.read(key: "languageCode");
+    if(localCode != null && localCode != "")
     {
-      language = int.parse(code);
+      code = int.parse(localCode);
     }
-    else if (window.locales.isNotEmpty && languages.contains(window.locales.first.languageCode))
+    else if (window.locales.isNotEmpty && languageCodes.contains(window.locales.first.languageCode))
     {
-      language = languages.indexOf(window.locales.first.languageCode.toString());
+      code = languageCodes.indexOf(window.locales.first.languageCode.toString());
     }
   }
 
-  static String view(List<String> words) => words[language];
+  static void saveLanguage(String value) async
+  {
+    code = languageLabels.indexOf(value);
+    await storage.write(key: "languageCode", value: code.toString());
+    main();
+  }
 
-  static List<String> languages = ["tr", "en", "de", "es"];
+  static String view(List<String> words) => words[code];
 
-  static List<String> mrb = ["Merhaba", "Hello", "Hallo", "Hola"];
-  static List<String> hosgeldiniz = ["Hoşgeldiniz", "Welcome", "Willkommen", "Bienvenido"];
-  static List<String> gunaydin = ["Günaydın", "Good morning", "Guten Morgen", "Buenos días"];
-  static List<String> iyiGeceler = ["İyi geceler", "Good night", "Gute Nacht", "Buenas noches"];
-  static List<String> hoscaKal = ["Hoşçakal", "Goodbye", "Auf Wiedersehen", "Adiós"];
-  static List<String> tesekkur = ["Teşekkür ederim", "Thank you", "Danke", "Gracias"];
-  static List<String> lutfen = ["Lütfen", "Please", "Bitte", "Por favor"];
-  static List<String> affedersiniz = ["Affedersiniz", "Excuse me", "Entschuldigung", "Perdón"];
-  static List<String> evet = ["Evet", "Yes", "Ja", "Sí"];
+  static List<String> languageCodes = ["tr", "en"];
+  static List<String> languageLabels = ["Türkçe", "English"];
 }
-
