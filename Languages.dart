@@ -4,6 +4,7 @@ import 'package:kitx/Components/Themes.dart';
 import 'package:kitx/Utils/Network.dart';
 import 'package:kitx/main.dart';
 
+// LanguageWidget(update:(){setState((){});},),
 // Languages.takeLanguage();
 // LanguageWidget(),
 // Languages.view(["Türkçe","İngilizce"]);
@@ -40,7 +41,8 @@ class Languages
 
 class LanguageWidget extends StatefulWidget
 {
-  const LanguageWidget({super.key});
+  final VoidCallback? update;
+  const LanguageWidget({super.key,required this.update});
 
   @override
   State<LanguageWidget> createState() => _LanguageWidgetState();
@@ -56,7 +58,7 @@ class _LanguageWidgetState extends State<LanguageWidget>
         Text(
             style: TextStyle(
                 fontSize: 18, color: Themes.mainColor, fontFamily: "SFUI"),
-            "Dil"),
+            Languages.view(["Dil","Language"])),
         SizedBox(
           width: 20,
         ),
@@ -68,10 +70,7 @@ class _LanguageWidgetState extends State<LanguageWidget>
           onChanged: (value) async
           {
             Languages.saveLanguage(value!);
-            setState(()
-            {
-              Languages.code;
-            });
+            widget.update?.call();
           },
           items: Languages.languageLabels.map((item)
           {
