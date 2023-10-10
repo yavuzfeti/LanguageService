@@ -8,6 +8,36 @@ import 'package:kitx/main.dart';
 // LanguageWidget(),
 // Languages.view(["Türkçe","İngilizce"]);
 
+class Languages
+{
+  static int code = 0;
+
+  static void takeLanguage() async
+  {
+    String? localCode = await storage.read(key: "languageCode");
+    if(localCode != null && localCode != "")
+    {
+      code = int.parse(localCode);
+    }
+    else if (window.locales.isNotEmpty && languageCodes.contains(window.locales.first.languageCode))
+    {
+      code = languageCodes.indexOf(window.locales.first.languageCode.toString());
+    }
+  }
+
+  static void saveLanguage(String value) async
+  {
+    code = languageLabels.indexOf(value);
+    await storage.write(key: "languageCode", value: code.toString());
+    main();
+  }
+
+  static String view(List<String> words) => words[code];
+
+  static List<String> languageCodes = ["tr", "en"];
+  static List<String> languageLabels = ["Türkçe", "English"];
+}
+
 class LanguageWidget extends StatefulWidget
 {
   const LanguageWidget({super.key});
@@ -54,34 +84,4 @@ class _LanguageWidgetState extends State<LanguageWidget>
       ],
     );
   }
-}
-
-class Languages
-{
-  static int code = 0;
-
-  static void takeLanguage() async
-  {
-    String? localCode = await storage.read(key: "languageCode");
-    if(localCode != null && localCode != "")
-    {
-      code = int.parse(localCode);
-    }
-    else if (window.locales.isNotEmpty && languageCodes.contains(window.locales.first.languageCode))
-    {
-      code = languageCodes.indexOf(window.locales.first.languageCode.toString());
-    }
-  }
-
-  static void saveLanguage(String value) async
-  {
-    code = languageLabels.indexOf(value);
-    await storage.write(key: "languageCode", value: code.toString());
-    main();
-  }
-
-  static String view(List<String> words) => words[code];
-
-  static List<String> languageCodes = ["tr", "en"];
-  static List<String> languageLabels = ["Türkçe", "English"];
 }
