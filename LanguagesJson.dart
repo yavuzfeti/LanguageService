@@ -15,7 +15,7 @@ class Languages
   static int code = 0;
   static String path = "";
   static List<String> codes = [];
-  static Map<String,dynamic> V = {};
+  static Map V = {};
 
   static void takeLanguage({required String languageFolderPath, required List<String> languageCodes}) async
   {
