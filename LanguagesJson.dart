@@ -15,7 +15,9 @@ class Languages
   static int code = 0;
   static String path = "";
   static List<String> codes = [];
-  static Map V = {};
+  static Map<String,dynamic> DEF = {};
+
+  static String V (String word) => (DEF[word]).toString();
 
   static void takeLanguage({required String languageFolderPath, required List<String> languageCodes}) async
   {
@@ -46,7 +48,7 @@ class Languages
   static void changeLanguage(int value) async
   {
     code = value;
-    V = await jsonDecode(await rootBundle.loadString("${path+codes[value]}.json"));
+    DEF = await jsonDecode(await rootBundle.loadString("${path+codes[value]}.json"));
   }
 }
 
@@ -90,7 +92,7 @@ class _LanguageWidgetState extends State<LanguageWidget>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${Languages.V["language"]}",
+          Languages.V("language"),
           style: TextStyle(fontSize: 18, color: Themes.mainColor, fontFamily: "SFUI"),
         ),
         SizedBox(
