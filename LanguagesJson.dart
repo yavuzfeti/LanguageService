@@ -6,8 +6,10 @@ import 'package:kitx/Components/Themes.dart';
 import 'package:kitx/Utils/Network.dart';
 import 'package:kitx/main.dart';
 
+// supportedLocales: await Languages.supLocale(),
+// locale: await Languages.locale(),
+// await Languages.takeLanguage(languageFolderPath:"lib/Assets/Languages/",languageCodes: ["tr", "en", "de", "ru", "ar"]);
 // LanguageWidget(update:(){setState((){});},),
-// Languages.takeLanguage(languageFolderPath:"lib/Assets/Languages/",languageCodes: ["tr", "en", "de", "ru", "ar"]);
 // Languages.V["turkish"];
 
 class Languages
@@ -17,9 +19,9 @@ class Languages
   static List<String> codes = [];
   static Map<String,dynamic> DEF = {};
 
-  static String V (String word) => (DEF[word] ?? word).toString();
+  static String v (String word) => (DEF[word] ?? word).toString();
 
-  static void takeLanguage({required String languageFolderPath, required List<String> languageCodes}) async
+  static Future<void> takeLanguage({required String languageFolderPath, required List<String> languageCodes}) async
   {
     path = languageFolderPath;
     codes = languageCodes;
@@ -50,6 +52,18 @@ class Languages
     code = value;
     DEF = await jsonDecode(await rootBundle.loadString("${path+codes[value]}.json"));
   }
+
+  static Future<List<Locale>> supLocale() async
+  {
+    List<Locale> supLcl = [];
+    for(String x in codes)
+    {
+      supLcl.add(Locale(x));
+    }
+    return supLcl;
+  }
+  
+  static Future<Locale> locale() async => Locale(Languages.codes[Languages.code]);
 }
 
 class LanguageWidget extends StatefulWidget
@@ -92,7 +106,7 @@ class _LanguageWidgetState extends State<LanguageWidget>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          Languages.V("language"),
+          Languages.v("language"),
           style: TextStyle(fontSize: 18, color: Themes.mainColor, fontFamily: "SFUI"),
         ),
         SizedBox(
