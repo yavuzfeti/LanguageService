@@ -17,7 +17,7 @@ class Languages
   static List<String> codes = [];
   static Map<String,dynamic> DEF = {};
 
-  static String V (String word) => (DEF[word]).toString();
+  static String V (String word) => (DEF[word] ?? word).toString();
 
   static void takeLanguage({required String languageFolderPath, required List<String> languageCodes}) async
   {
