@@ -6,11 +6,13 @@ import 'package:kitx/main.dart';
 
 // LanguageWidget(update:(){setState((){});},),
 // Languages.takeLanguage();
-// LanguageWidget(),
 // Languages.view(["Türkçe","İngilizce"]);
 
 class Languages
 {
+  static List<String> languageCodes = ["tr", "en"];
+  static List<String> languageLabels = ["Türkçe", "English"];
+
   static int code = 0;
 
   static void takeLanguage() async
@@ -33,10 +35,7 @@ class Languages
     main();
   }
 
-  static String view(List<String> words) => words[code];
-
-  static List<String> languageCodes = ["tr", "en"];
-  static List<String> languageLabels = ["Türkçe", "English"];
+  static String view(List<String> words) => words.length > code ? words[code] : words[1];
 }
 
 class LanguageWidget extends StatefulWidget
